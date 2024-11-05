@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { LangContext } from "../App";
 
-function TodoForm() {
+function TodoForm({handleAddTodo}) {
+  const lang = useContext(LangContext);
+  const [todoText, setTodoText] = useState("");
+  const [todo, setTodo] = useState({
+    id: Date.now(),
+    text: todoText,
+    completed: false,
+  });
+
+  useEffect(() => {
+    setTodo({
+      id: Date.now(),
+      text: todoText,
+      completed: false,
+    });
+  }, [todoText]);
 
   return (
-    <form className="d-flex mb-3">
+    <form onSubmit={(e) => {handleAddTodo(e, todo); setTodoText('')}} className="d-flex mb-3">
       <input
         type="text"
         className="form-control me-2"
-        placeholder="Tambah todo..."
+        placeholder={lang === 'id' ? 'Tambah todo...' : 'Add todo...'}
+        onChange={(e) => setTodoText(e.target.value)}
+        value={todoText}
       />
       <button type="submit" className="btn btn-primary">
-        Add
+       {lang === 'id' ? 'Tambah' : 'Add'}
       </button>
     </form>
   );
